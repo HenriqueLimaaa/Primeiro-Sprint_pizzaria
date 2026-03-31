@@ -4,36 +4,31 @@ Sistema web para gerenciamento de pedidos de uma pizzaria, desenvolvido com Node
 
 📁 Estrutura do Projeto
 Primeiro-Sprint_pizzaria/
-│
-├── public/              # Arquivos do frontend
-│   ├── index.html
-│   ├── script.js
-│   └── style.css
-│
-├── src/
-│   ├── database/        # Configuração do banco SQLite
-│   │   └── sqlite.js
-│   │
-│   ├── middlewares/     # Middlewares (ex: autenticação)
-│   │   └── auth.js
-│   │
-│   ├── models/          # Modelos do sistema
-│   │   ├── Cliente.js
-│   │   ├── Pedido.js
-│   │   ├── Pizza.js
-│   │   └── Usuario.js
-│   │
-│   └── routes/          # Rotas da aplicação
-│       └── index.js
-│
-├── .env                 # Variáveis de ambiente
-├── .gitignore           # Arquivos ignorados pelo Git
-├── index.js             # Arquivo principal do servidor
-├── package.json         # Configurações do projeto
+sistema-pizzaria/
+├── .env.         # Variáveis de ambiente
+├── .gitignore    # Arquivos ignorados pelo Git
+├── README.md           # Documentação
+├── package.json        # Configurações do projeto
 ├── package-lock.json
-├── pizzaria.db          # Banco de dados SQLite
-├── seed.js              # Script para popular o banco
-└── README.md            # Documentação
+├── index.js
+├── seed.js            # Script para popular o banco
+├── pizzaria.db        # Banco de dados SQLite      
+├── public/
+│   ├── index.html
+│   ├── script.js        #Arquivos do Front-End
+│   └── style.css
+└── src/
+    ├── database/
+    │   └── sqlite.js    # Dados do SQLite
+    ├── middlewares/
+    │   └── auth.js      # Middlewares (ex: autenticação)
+    ├── models/
+    │   ├── Cliente.js   # Modelos do sistema
+    │   ├── Pedido.js
+    │   ├── Pizza.js
+    │   └── Usuario.js
+    └── routes/
+        └── index.js     # Rotas da aplicação
 🚀 Tecnologias Utilizadas
 Node.js
 Express
@@ -61,7 +56,7 @@ npm install
 Exemplo:
 
 PORT=3000
-4. Rode o seed (popular banco)
+4. Popule o banco de dados
 node seed.js
 5. Inicie o servidor
 node index.js
@@ -114,8 +109,6 @@ Certifique-se de ignorar:
 node_modules/
 .env
 pizzaria.db
-👨‍💻 Autor
-
-Desenvolvido por:
+👨‍💻 Autores
 Eduardo de Figueiredo Ferreira Gandra
 Henrique Lima da Silva
