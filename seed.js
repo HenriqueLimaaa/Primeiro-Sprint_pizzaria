@@ -1,26 +1,41 @@
+// Carrega as variáveis de ambiente do arquivo .env
 require('dotenv').config();
+
+// Importa funções do banco (inicialização, execução de comandos e consultas)
 const { ready, run, query } = require('./src/database/sqlite');
+
+// Biblioteca para criptografar senhas
 const bcrypt = require('bcryptjs');
 
+
+// Função principal que executa o seed (popular o banco)
 async function seed() {
   try {
+      // Aguarda o banco de dados estar pronto
     await ready;
     console.log('🧹 Limpando banco...');
-
+    
+    // Deleta todos os dados das tabelas (ordem importante por causa de relacionamentos)
     run('DELETE FROM itens_pedido');
     run('DELETE FROM pedidos');
     run('DELETE FROM pizzas');
     run('DELETE FROM clientes');
     run('DELETE FROM usuarios');
 
+    // Reseta os IDs automáticos (autoincrement)
     try {
       run("DELETE FROM sqlite_sequence WHERE name IN ('itens_pedido','pedidos','pizzas','clientes','usuarios')");
     } catch(_) { }
+        // Ignora erro caso a tabela sqlite_sequence não exista
 
     console.log('✅ Banco limpo');
+    
 
+    // Criptografa a senha padrão "123456"
     const hash = await bcrypt.hash('123456', 10);
 
+
+     // Cria usuários iniciais do sistema
     run('INSERT INTO usuarios (nome, email, senha, perfil) VALUES (?, ?, ?, ?)',
       ['Administrador Master', 'admin@pizzaria.com', hash, 'Administrador']);
     run('INSERT INTO usuarios (nome, email, senha, perfil) VALUES (?, ?, ?, ?)',
@@ -29,7 +44,8 @@ async function seed() {
       ['Garcom Oficial', 'garcom@pizzaria.com', hash, 'Garcom']);
 
     console.log('✅ 3 usuários criados');
-
+     
+     // Lista de clientes (nome, telefone, endereço, observações)
     const clientes = [
       ['Lucas Ferreira Santos',   '11991234501', {rua:'Rua das Acácias',numero:'142',bairro:'Vila Madalena',cidade:'São Paulo',cep:'05435-000'}, 'Alérgico a glúten'],
       ['Camila Rodrigues Lima',   '11991234502', {rua:'Av. Paulista',numero:'900',bairro:'Bela Vista',cidade:'São Paulo',cep:'01310-100'}, ''],
@@ -53,12 +69,14 @@ async function seed() {
       ['Carolina Batista Pinto',  '11991234520', {rua:'Rua Peixoto Gomide',numero:'1100',bairro:'Jardim Paulista',cidade:'São Paulo',cep:'01409-001'}, 'Prefere bordas recheadas'],
     ];
 
+    // Insere cada cliente no banco
     for (const [nome, tel, end, obs] of clientes) {
       run('INSERT INTO clientes (nome, telefone, endereco, observacoes) VALUES (?, ?, ?, ?)',
         [nome, tel, JSON.stringify(end), obs]);
     }
     console.log('✅ 20 clientes criados');
 
+    // Lista de pizzas (nome, descrição, ingredientes, preços e categoria)
     const pizzas = [
       ['Calabresa','Clássica brasileira, presença garantida em qualquer mesa','Calabresa fatiada, cebola e azeitona',{P:35,M:45,G:55},'tradicional'],
       ['Margherita','A tradição italiana em cada fatia','Molho de tomate, mussarela e manjericão fresco',{P:34,M:44,G:54},'tradicional'],
@@ -88,16 +106,25 @@ async function seed() {
     }
     console.log('✅ 20 pizzas criadas');
 
+
+    // Mensagens finais de sucesso
     console.log('======================================');
     console.log('🔥 SEED EXECUTADO COM SUCESSO!');
     console.log('======================================');
     console.log('Login: admin@pizzaria.com | Senha: 123456');
     console.log('======================================');
+
+    // Finaliza o processo com sucesso
     process.exit(0);
   } catch (err) {
+
+    // Caso ocorra algum erro durante o seed
     console.error('❌ ERRO NO SEED:', err);
+
+    // Finaliza o processo com erro
     process.exit(1);
   }
 }
 
+// Executa a função de seed
 seed();
