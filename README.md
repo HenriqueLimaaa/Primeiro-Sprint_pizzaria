@@ -182,6 +182,6 @@ pizzaria.db
 ## 👨‍💻 Autores
 
 * Eduardo de Figueiredo Ferreira Gandra
-* Henrique Lima da Silva
+* Henrique Da Silva Lima 
 
 ---
